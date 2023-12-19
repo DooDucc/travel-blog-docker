@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  mongodb:
+    image: mongo:5.0.23
+    container_name: travel-blog-db
+    restart: always
+    volumes:
+      - mongodb:/data/db
+
+  be:
+    build: ./travel-blog-be
+    container_name: travel-blog-be
+    ports:
+      - 5000:5000
+    environment:
+      - CONNECTION_MONGODB_URL=mongodb://mongodb:27017/travel-blog
+      - PORT=5000
+      - SECRET_JWT_TOKEN=ducdc
+    depends_on:
+      - mongodb
+
+  fe:
+    build: ./travel-blog-fe
+    container_name: travel-blog-fe
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true
+    depends_on:
+      - be
+volumes:
+  mongodb: {}
