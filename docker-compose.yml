@@ -10,6 +10,7 @@ services:
   be:
     build: ./travel-blog-be
     container_name: travel-blog-be
+    restart: unless-stopped
     ports:
       - 5000:5000
     environment:
@@ -23,10 +24,11 @@ services:
     build: ./travel-blog-fe
     container_name: travel-blog-fe
     ports:
-      - 3000:3000
-    stdin_open: true
-    tty: true
+      - 80:80
+    environment:
+      - REACT_APP_BACKEND_URL=/api/v1
     depends_on:
       - be
+
 volumes:
   mongodb: {}
